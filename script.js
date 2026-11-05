@@ -15,6 +15,22 @@
     filters.forEach(item => { const active = item === button; item.classList.toggle('active', active); item.setAttribute('aria-pressed', String(active)); });
     projects.forEach(item => { item.hidden = selected !== 'all' && !item.dataset.tags.split(' ').includes(selected); });
   }));
+  const copyEmailButton = document.getElementById('copy-email');
+  const copyEmailStatus = document.getElementById('copy-email-status');
+  if (copyEmailButton && copyEmailStatus) {
+    copyEmailButton.addEventListener('click', async () => {
+      const address = copyEmailButton.dataset.email;
+      try {
+        if (!navigator.clipboard || !navigator.clipboard.writeText) throw new Error('Clipboard unavailable');
+        await navigator.clipboard.writeText(address);
+        copyEmailStatus.textContent = 'Email copied!';
+        copyEmailButton.firstChild.textContent = 'Copied! ';
+      } catch (error) {
+        copyEmailStatus.textContent = 'Copy this address: ' + address;
+        copyEmailButton.firstChild.textContent = 'Copy email ';
+      }
+    });
+  }
   const year = document.getElementById('year');
   if (year) year.textContent = String(new Date().getFullYear());
 })();
